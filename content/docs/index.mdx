@@ -1,13 +1,20 @@
 ---
-title: Hello World
-description: Your first document
+title: Hello ROS2
+description: Sending my first message
 ---
 
-Welcome to the docs! You can start writing documents in `/content/docs`.
+## Talk to the Listener
 
-## What is Next?
+Make sure your backend is running:
+1. `ros2 launch rosbridge_server rosbridge_websocket_launch.xml`
+2. `ros2 run demo_nodes_cpp listener`
 
-<Cards>
-  <Card title="Learn more about Next.js" href="https://nextjs.org/docs" />
-  <Card title="Learn more about Fumadocs" href="https://fumadocs.dev" />
-</Cards>
+Click the button below to send "Hello from Web!" to the listener.
+
+<PublisherButton 
+  topic="/chatter" 
+  type="std_msgs/String" 
+  data={{ data: "Hello from Web!" }}
+>
+  Send Message
+</PublisherButton>
