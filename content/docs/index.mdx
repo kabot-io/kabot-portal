@@ -1,6 +1,6 @@
 ---
-title: Hello ROS2
-description: Sending my first message
+title: ROS Control Panel
+description: Interact with your robot directly from the documentation.
 ---
 
 ## Talk to the Listener
@@ -18,3 +18,19 @@ Click the button below to send "Hello from Web!" to the listener.
 >
   Send Message
 </PublisherButton>
+
+---
+
+## Monitor the Topic
+
+Below is a live view of the `/chatter` topic. Any message sent (by you or the terminal) will appear here.
+
+<SubscriberCard topic="/chatter" type="std_msgs/String" />
+
+### Test Loop
+You can test this by opening a terminal and publishing a message repeatedly:
+
+```bash
+ros2 topic pub /chatter std_msgs/String "data: 'Hello from Terminal'"
+```
+
