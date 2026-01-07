@@ -3,11 +3,30 @@ title: ROS Control Panel
 description: Interact with your robot directly from the documentation.
 ---
 
+## Start the ROS 2 Web bridge
+
+Install rosbridge suite:
+
+```bash
+sudo apt update
+sudo apt install ros-$ROS_DISTRO-rosbridge-suite
+```
+
+start rosbridge
+
+```bash
+ros2 launch rosbridge_server rosbridge_websocket_launch.xml
+```
+
+you should see that the connection in upper left corners goes from disconnected to connected, if so you can proceed.
+
 ## Drive the Turtle
 
-Launch the simulation:
-1. `ros2 run turtlesim turtlesim_node`
-2. `ros2 launch rosbridge_server rosbridge_websocket_launch.xml`
+Start the [turtlesim](https://wiki.ros.org/turtlesim) node
+
+```bash
+ros2 run turtlesim turtlesim_node
+```
 
 Use the joystick below to move the turtle.
 
@@ -36,5 +55,7 @@ Use the joystick below to move the turtle.
 ---
 
 ## Monitor the Topic
+
+Here you can see the last message that was sent to `/turtle1/cmd_vel` of type [`geometry_msgs/Twist`](https://docs.ros.org/en/noetic/api/geometry_msgs/html/msg/Twist.html)
 
 <SubscriberCard topic="/turtle1/cmd_vel" type="geometry_msgs/Twist" />
