@@ -63,11 +63,11 @@ export function RosProvider({ children }: { children: React.ReactNode }) {
     };
 
     const handleClose = () => {
-      console.log('Connection closed. Reconnecting in 3s...');
+      console.log('Connection closed. Reconnecting in 1s...');
       setIsConnected(false);
       setStatus('Disconnected');
       if (reconnectTimeoutRef.current) clearTimeout(reconnectTimeoutRef.current);
-      reconnectTimeoutRef.current = setTimeout(connect, 3000);
+      reconnectTimeoutRef.current = setTimeout(connect, 1000);
     };
 
     // Event Listeners
