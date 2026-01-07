@@ -3,22 +3,7 @@ title: ROS Control Panel
 description: Interact with your robot directly from the documentation.
 ---
 
-## Start the ROS 2 Web bridge
-
-Install rosbridge suite:
-
-```bash
-sudo apt update
-sudo apt install ros-$ROS_DISTRO-rosbridge-suite
-```
-
-start rosbridge
-
-```bash
-ros2 launch rosbridge_server rosbridge_websocket_launch.xml
-```
-
-you should see that the connection in upper left corners goes from disconnected to connected, if so you can proceed.
+import { ArrowUp, ArrowDown, RotateCcw, RotateCw } from 'lucide-react';
 
 <ConnectionGuard docsLink="docs/setup-guide">
 
@@ -32,29 +17,8 @@ ros2 run turtlesim turtlesim_node
 
 Use the joystick below to move the turtle.
 
-<div className="max-w-xs mx-auto">
-  <TeleopJoystick />
-</div>
+<Teleop />
 
-<div className="grid grid-cols-2 gap-4 mt-4">
-    <PublisherButton 
-      topic="/turtle1/cmd_vel" 
-      type="geometry_msgs/Twist" 
-      data={{ linear: {x: 2.0, y: 0, z: 0}, angular: {x: 0, y: 0, z: 0} }}
-    >
-      Move Forward
-    </PublisherButton>
-    
-    <PublisherButton 
-      topic="/turtle1/cmd_vel" 
-      type="geometry_msgs/Twist" 
-      data={{ linear: {x: 0, y: 0, z: 0}, angular: {x: 0, y: 0, z: 1.5} }}
-    >
-      Spin Left
-    </PublisherButton>
-</div>
-
-</ConnectionGuard>
 
 ---
 
@@ -63,3 +27,5 @@ Use the joystick below to move the turtle.
 Here you can see the last message that was sent to `/turtle1/cmd_vel` of type [`geometry_msgs/Twist`](https://docs.ros.org/en/noetic/api/geometry_msgs/html/msg/Twist.html)
 
 <SubscriberCard topic="/turtle1/cmd_vel" type="geometry_msgs/Twist" />
+
+</ConnectionGuard>

@@ -1,9 +1,9 @@
 'use client';
 
 import { useRos } from '@/components/ros-provider';
-import { Joystick } from 'react-joystick-component';
+import { Joystick, JoystickShape } from 'react-joystick-component';
 import { useState, useRef } from 'react';
-import { Gamepad2 } from 'lucide-react';
+import { Card } from 'fumadocs-ui/components/card';
 
 // TUNING CONSTANTS
 const MAX_LINEAR = 2.0;  // Max forward speed (m/s)
@@ -84,26 +84,15 @@ export function TeleopJoystick() {
   };
 
   return (
-    <div className="flex flex-col items-center justify-center p-6 border rounded-xl bg-card shadow-sm select-none touch-none">
-      <div className="flex items-center gap-2 mb-4 text-muted-foreground">
-        <Gamepad2 className="w-5 h-5" />
-        <span className="font-medium text-sm">Teleoperation</span>
-      </div>
-      
-      <div className="relative">
-        <Joystick 
-          size={100} 
-          sticky={false} 
-          baseColor="#e5e5e5" 
-          stickColor="#3b82f6" 
-          move={handleMove} 
-          stop={handleStop} 
-        />
-      </div>
-
-      <div className="mt-4 font-mono text-xs text-muted-foreground h-4">
-        {isConnected ? status : "Robot Disconnected"}
-      </div>
-    </div>
+      <Joystick 
+        size={100}
+        sticky={false}
+        baseColor="var(--secondary)"
+        stickColor="var(--primary)"
+        baseShape={JoystickShape.Square}
+        stickShape={JoystickShape.Square}
+        move={handleMove}
+        stop={handleStop}
+      />
   );
 }

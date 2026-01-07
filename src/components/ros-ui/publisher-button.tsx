@@ -2,34 +2,34 @@
 
 import { useRos } from '@/components/ros-provider';
 import { useState } from 'react';
-
-// No imports of roslib here! We get it from the Context.
+import { Button } from '@/components/ui/button';
+import { WifiOff } from 'lucide-react';
+import { cn } from '@/lib/utils'; // Optional: Use if you want cleaner class merging
 
 interface PublisherButtonProps {
   topic: string;
   type: string;
   data: any; 
   children: React.ReactNode;
+  variant?: "default" | "destructive" | "outline" | "secondary" | "ghost";
+  className?: string; // <--- 1. Add this definition
 }
 
-export function PublisherButton({ topic, type, data, children }: PublisherButtonProps) {
-  // 1. Get ROSLIB from the hook
+export function PublisherButton({ 
+  topic, 
+  type, 
+  data, 
+  children,
+  variant = "default",
+  className, // <--- 2. Receive it here
+}: PublisherButtonProps) {
   const { ros, isConnected, ROSLIB } = useRos();
   const [justClicked, setJustClicked] = useState(false);
 
   const handlePublish = () => {
-    if (!ros || !isConnected) {
-      alert('Robot is disconnected!');
-      return;
-    }
-
-    if (!ROSLIB) {
-      console.error("ROSLIB not loaded yet");
-      return;
-    }
+    if (!ros || !isConnected || !ROSLIB) return;
 
     try {
-      // 2. Use the library instance we got from the provider
       const rosTopic = new ROSLIB.Topic({
         ros: ros,
         name: topic,
@@ -37,29 +37,36 @@ export function PublisherButton({ topic, type, data, children }: PublisherButton
       });
 
       const message = new ROSLIB.Message(data);
-
       rosTopic.publish(message);
+      
       console.log(`Published to ${topic}:`, data);
 
       setJustClicked(true);
-      setTimeout(() => setJustClicked(false), 200);
+      setTimeout(() => setJustClicked(false), 300);
 
     } catch (e) {
       console.error("Publishing Failed:", e);
     }
   };
 
+  if (!isConnected) {
+    // Pass className here too so layout doesn't break when offline
+    return (
+      <Button disabled variant="ghost" className={`gap-2 opacity-70 ${className}`}>
+        <WifiOff className="h-4 w-4" />
+        Offline
+      </Button>
+    );
+  }
+
   return (
-    <button
+    <Button 
       onClick={handlePublish}
-      disabled={!isConnected}
-      className={`
-        px-4 py-2 rounded font-medium transition-all duration-200 transform
-        ${!isConnected ? 'bg-gray-300 text-gray-500 cursor-not-allowed' : 
-          justClicked ? 'bg-green-600 scale-95' : 'bg-blue-600 hover:bg-blue-700 text-white shadow-md hover:shadow-lg'}
-      `}
+      // Use the variant prop (don't hardcode "outline") so you can override it if needed
+      variant={justClicked ? "secondary" : variant}
+      className={`cursor-pointer ${className}`}
     >
       {children}
-    </button>
+    </Button>
   );
 }

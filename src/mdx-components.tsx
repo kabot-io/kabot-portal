@@ -7,6 +7,7 @@ import { TeleopJoystick } from './components/ros-ui/teleop-joystick';
 import { ConnectionGuard } from './components/ros-ui/connection-guard';
 import { DistroTabs } from './components/ros-ui/distro-tabs';
 import { Tab } from 'fumadocs-ui/components/tabs';
+import { Teleop } from '@/components/ros-ui/teleop';
 
 export function getMDXComponents(components?: MDXComponents): MDXComponents {
   return {
@@ -17,6 +18,7 @@ export function getMDXComponents(components?: MDXComponents): MDXComponents {
     TeleopJoystick,
     ConnectionGuard,
     DistroTabs,
+    Teleop,
     Tab,
   };
 }
