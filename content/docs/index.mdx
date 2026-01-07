@@ -3,34 +3,38 @@ title: ROS Control Panel
 description: Interact with your robot directly from the documentation.
 ---
 
-## Talk to the Listener
+## Drive the Turtle
 
-Make sure your backend is running:
-1. `ros2 launch rosbridge_server rosbridge_websocket_launch.xml`
-2. `ros2 run demo_nodes_cpp listener`
+Launch the simulation:
+1. `ros2 run turtlesim turtlesim_node`
+2. `ros2 launch rosbridge_server rosbridge_websocket_launch.xml`
 
-Click the button below to send "Hello from Web!" to the listener.
+Use the joystick below to move the turtle.
 
-<PublisherButton 
-  topic="/chatter" 
-  type="std_msgs/String" 
-  data={{ data: "Hello from Web!" }}
->
-  Send Message
-</PublisherButton>
+<div className="max-w-xs mx-auto">
+  <TeleopJoystick />
+</div>
+
+<div className="grid grid-cols-2 gap-4 mt-4">
+    <PublisherButton 
+      topic="/turtle1/cmd_vel" 
+      type="geometry_msgs/Twist" 
+      data={{ linear: {x: 2.0, y: 0, z: 0}, angular: {x: 0, y: 0, z: 0} }}
+    >
+      Move Forward
+    </PublisherButton>
+    
+    <PublisherButton 
+      topic="/turtle1/cmd_vel" 
+      type="geometry_msgs/Twist" 
+      data={{ linear: {x: 0, y: 0, z: 0}, angular: {x: 0, y: 0, z: 1.5} }}
+    >
+      Spin Left
+    </PublisherButton>
+</div>
 
 ---
 
 ## Monitor the Topic
 
-Below is a live view of the `/chatter` topic. Any message sent (by you or the terminal) will appear here.
-
-<SubscriberCard topic="/chatter" type="std_msgs/String" />
-
-### Test Loop
-You can test this by opening a terminal and publishing a message repeatedly:
-
-```bash
-ros2 topic pub /chatter std_msgs/String "data: 'Hello from Terminal'"
-```
-
+<SubscriberCard topic="/turtle1/cmd_vel" type="geometry_msgs/Twist" />
