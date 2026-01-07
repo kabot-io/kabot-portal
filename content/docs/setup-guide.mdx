@@ -1,0 +1,84 @@
+---
+title: Setup Guide
+description: How to connect your ROS 2 robot to the web interface.
+---
+
+import { Step, Steps } from 'fumadocs-ui/components/steps';
+
+To control your robot from a web browser, we cannot talk to DDS (the ROS middleware) directly. Instead, we use a WebSocket bridge that translates JSON from the browser into ROS 2 messages.
+
+
+
+<Steps>
+
+<Step>
+### Install Rosbridge Suite
+
+You need to install the `rosbridge_suite` package on your robot (or simulation computer). Replace `<distro>` with your ROS 2 version (e.g., `jazzy`, `iron`, `humble`).
+
+```bash
+sudo apt update
+sudo apt install ros-jazzy-rosbridge-suite
+```
+</Step>
+
+<Step>
+### Launch the WebSocket Server
+
+Run the launch file to start the server. By default, it listens on port **9090**.
+
+```bash
+ros2 launch rosbridge_server rosbridge_websocket_launch.xml
+```
+
+You should see output indicating the server has started:
+```text
+[INFO] [rosbridge_websocket]: Rosbridge WebSocket server started on port 9090
+```
+</Step>
+
+<Step>
+### Verification
+
+To verify the connection is open, you can use `netcat` or simply open your browser's developer console on this page.
+
+```bash
+nc -zv localhost 9090
+# Output: Connection to localhost 9090 port [tcp/*] succeeded!
+```
+</Step>
+
+</Steps>
+
+---
+
+## Configuration
+
+### Allowing Remote Connections
+By default, the server might only accept connections from `localhost`. If you are running the website on a different device (like a phone or laptop) than the robot, you need to allow external addresses.
+
+Run the launch file with the `address` parameter:
+
+```bash
+ros2 launch rosbridge_server rosbridge_websocket_launch.xml address:=0.0.0.0
+```
+
+### Changing the Port
+If port 9090 is busy, you can change it:
+
+```bash
+ros2 launch rosbridge_server rosbridge_websocket_launch.xml port:=9091
+```
+
+*(Note: You will need to update the port in your `src/components/ros-provider.tsx` file to match).*
+
+---
+
+## Troubleshooting
+
+### "Connection Refused"
+1. Check if the terminal running `rosbridge_server` is still active.
+2. Ensure no firewall (`ufw`) is blocking port 9090.
+
+### "WebSocket Connection Failed"
+If you are using **Firefox**, it strictly blocks connections to `ws://localhost` from non-secure sites. Try using Chrome or Edge, or ensure your Next.js app is running on `localhost` (not an IP address) during development.
