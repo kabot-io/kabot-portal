@@ -1,7 +1,17 @@
-# my-ros-docs
+# kabot-portal
 
 This is a Next.js application generated with
 [Create Fumadocs](https://github.com/fuma-nama/fumadocs).
+
+Install dependencies (`pnpm` is recommended):
+
+```bash
+npm install
+# or
+pnpm install
+# or
+yarn install
+```
 
 Run development server:
 
@@ -14,6 +24,10 @@ yarn dev
 ```
 
 Open http://localhost:3000 with your browser to see the result.
+
+## Content
+
+The documentation content is written in MDX and located in the `content/docs` folder. The page auto-updates as you edit the file, when running in development mode.
 
 ## Explore
 
