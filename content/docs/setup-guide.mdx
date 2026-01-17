@@ -1,11 +1,24 @@
 ---
 title: Setup Guide
-description: How to connect your ROS 2 robot to the web interface.
+description: How to connect your ROS2 robot to the web interface.
 ---
 
 import { Step, Steps } from 'fumadocs-ui/components/steps';
 
-To attach kabot-portal to your ROS environment, we use a WebSocket bridge that translates JSON from the browser into ROS 2 messages, because it is not possible to directly connect browser with ROS middleware.
+
+
+# ROS2 Setup on local machine
+
+Have you already set up ROS2 on your local machine? If not, please check the docs for [ROS2 Installation and Setup Guide](./ros-setup-guide).
+
+### Attach Kabot-portal to ROS2
+
+To attach kabot-portal to your ROS environment, we use a WebSocket bridge that translates JSON from the browser into ROS2 messages, because it is not possible to directly connect browser with ROS middleware.
+
+<Callout type="warning" title="Network Accessibility">
+It is important that your ROS2 websocket bridge is running on a machine that is reachable from your web browser. It generally means that you should be running it locally. If you are running ROS2 inside container, ensure that [`--network=host`](https://docs.docker.com/engine/network/drivers/host/) mode is enabled, or that the container ports are properly forwarded - ros bridge by default uses websocket connection over TCP port 9090.
+</Callout>
+
 <DistroTabs>
 <Tab value="Humble">
 More info about ROS2 middleware (advanced): [ROS2 middleware implementations](https://docs.ros.org/en/humble/Concepts/Advanced/About-Middleware-Implementations.html)

@@ -8,6 +8,7 @@ import { ConnectionGuard } from './components/ros-ui/connection-guard';
 import { DistroTabs } from './components/ros-ui/distro-tabs';
 import { Tab } from 'fumadocs-ui/components/tabs';
 import { Teleop } from '@/components/ros-ui/teleop';
+import { YouTube } from './components/ui/youtube';
 
 export function getMDXComponents(components?: MDXComponents): MDXComponents {
   return {
@@ -18,6 +19,7 @@ export function getMDXComponents(components?: MDXComponents): MDXComponents {
     TeleopJoystick,
     ConnectionGuard,
     DistroTabs,
+    YouTube,
     Teleop,
     Tab,
   };

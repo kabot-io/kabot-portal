@@ -21,7 +21,7 @@ export function ConnectionGuard({
       {/* 1. Show Callout at the top if disconnected */}
       {!isConnected && (
         <Callout type="error" icon={<Cable className="text-red-500" />}>
-          This component requires an active WebSocket connection to your robot. 
+          This tutorial requires an active WebSocket connection to your robot.
           Please ensure <code>rosbridge_server</code> is running. 
           <br />
           <br />
