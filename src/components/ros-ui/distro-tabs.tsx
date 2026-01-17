@@ -4,7 +4,7 @@ import { Tabs, TabsProps } from 'fumadocs-ui/components/tabs';
 import { Children, isValidElement, ReactNode } from 'react';
 
 // 1. Define your Source of Truth
-const DISTROS = ['Humble', 'Jazzy'] as const;
+const DISTROS = ['Humble', 'Jazzy'] as const as string[];
 
 export function DistroTabs(props: Partial<TabsProps>) {
   // 2. SAFETY CHECK (Development Only)
@@ -13,7 +13,7 @@ export function DistroTabs(props: Partial<TabsProps>) {
     
     // Extract the 'value' prop from each <Tab> child
     const providedDistros = children
-      .map(child => isValidElement(child) ? child.props.value : null)
+      .map(child => isValidElement(child) ? (child.props as { value?: string }).value : null)
       .filter(Boolean);
 
     // Find which ones are missing
