@@ -1,12 +1,11 @@
 // keystatic.config.ts
-import { SubscriberCard } from '@/components/ros-ui/subscriber-card';
-import { YouTube } from '@/components/ui/youtube';
 import { config, fields, collection } from '@keystatic/core';
 import { wrapper, block } from '@keystatic/core/content-components'
 
 export default config({
   storage: {
-    kind: 'local',
+    kind: 'github',
+    repo: 'kabot-io/kabot-portal'
   },
   collections: {
     posts: collection({
