@@ -8,7 +8,7 @@ export default config({
     repo: 'kabot-io/kabot-portal'
   },
   collections: {
-    posts: collection({
+    docs: collection({
       label: 'Docs',
       slugField: 'title',
       path: 'content/docs/*',
