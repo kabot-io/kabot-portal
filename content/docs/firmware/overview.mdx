@@ -1,0 +1,135 @@
+---
+title: Kabot Overview
+description: Overview of the Kabot project
+---
+
+# Kabot
+
+## Czym jest Kabot?
+
+Kabot to projekt, którego celem jest stworzenie platformy sprzętowej wraz z oprogramowaniem, które może w znaczący sposób ułatwić naukę algorytmów robotyki mobilnej. Projekt różni się znacznie od innych komerycjnych, niskokosztowych robotów mobilnych tym, że dostarczony jest nie tylko hardware, ale też solidna baza software'owa - zarówno w formie narzędzi wizualizacyjnych, ale też programistycznych. Kabot ma nie być kolejnym robotem zbudowanym z wykorzystaniem Arduino, kabot ma być dla robotyki tym, czym Arduino stało się dla edukacji w dziedzinie programowania mikrokontrolerów.
+
+TODO: Czym różni się od konkurencji - Picobricks, Husarion, Turtlebot, Arduino Alvik
+
+## Misja i wizja
+
+### Dla Hobbystów
+
+Software i firmware stack można wykorzystać do np. zaadaptowania już działającego robota do środowiska uruchomieniowego Kabot, a dalej ROS2. Wystarczy do firmware'u dopisać (często w formie włączenia obsługi wyłączenie w Zephyrowym devicetree) obsługę sterowników silników i czujników, a dalej można korzystać z całego ekosystemu ROS2.
+
+### Dla Edukacji
+
+## W jaki sposób realizowane są te cele?
+
+Kabot wynosi do bardzo wysokiej warstwy abstrakcji sterowanie oraz badanie stanu robota i otoczenia. Sam robot (w sensie sprzętu) bez podłączonego komputera z oprogramowaniem nie jest w stanie wiele zdziałać - jego jedynym zadaniem jest wysyłanie do komputera sterującego wiadomości o stanie wewnętrzym i pomiarów czujników (`State`) oraz reagowanie na dane sterujące (`Control`).
+
+```
+   ┌────────┐              ┌─────┐   
+┌─>│Komputer│──{Control}──>│Robot│──┐
+│  └────────┘              └─────┘  │
+└───────────────{State}─────────────┘
+
+```
+
+W ten sposób, użytkownik jest zupełnie odseparowany od kwestii sprzętowych i niskopoziomowego programowania. Jedynym zadaniem pętli sterującej (algorytmu po stronie komputera) jest przekształcenie pomiarów z robota w jego sterowanie. 
+
+```python
+def loop(state: StateMsg, control: ControlMsg) -> ControlMsg:
+    ...
+    return control
+```
+
+Użytkownik w edytorze kodu dostaje zalążek funkcji, która jest cyklicznie wywoływana i jego zadaniem jest napisanie algorytmu, który tak przetworzy dane z czujników aby wysterować silniki które będą odpowiednio poruszały robotem. Dla przykładu, algorytm do sterowania robotem tak, by podążał za światłem może wyglądać następująco:
+
+```python
+LIGHT_THRESHOLD_LUX = 200
+
+def loop(state: StateMsg, control: ControlMsg) -> ControlMsg:
+
+    # jeśli prawy czujnik światła wykryje światło powyżej progu
+    if state.light_sensor_right.value > LIGHT_THRESHOLD_LUX:
+        
+        # ustaw lewy silnik na pełną moc
+        control.effort.x.value = 1.0
+    
+    # jeśli lewy czujnik światła wykryje światło powyżej progu
+    if state.light_sensor_left.value > LIGHT_THRESHOLD_LUX:
+        
+        # ustaw prawy silnik na pełną moc
+        control.effort.y.value = 1.0
+
+    return control
+```
+
+    
+
+
+## Jak to się dzieje?
+
+### Warstwa Aplikacji
+
+Jej celem jest przekształcenie State -> Control. To właśnie do tej warstwy dostęp ma użytkownik. Jest to miejsce, gdzie wpiąć można zarówno prosty skrypt jak powyższy, ale również adapter do [Robot Operating System](https://www.ros.org) w formie adaptera [ROS2-control](https://control.ros.org/rolling/index.html)
+
+### Warstwa komunikacji między komputerem a robotem
+
+
+#### Kontrakt 
+
+Kontrakt mówiący o tym, jak wygląda struktura danych przekazywana pomiędzy robotem a komputerem po łączu danych
+
+#### Serializacja 
+
+Sposób opisu wiadomości - protobuf. Opisać dlaczego wektory, jakie są jednostki pomiarów. Zmienić floaty na double. Gdzie jest repozytorium z proto?
+
+#### Łącze danych
+
+Wifi, Endpointy UDP, fire and forget dlatego, że to dane z czujników. 
+
+### Warstwa akwizycji danych i sterowania
+
+Wątki fetchujące dane z czujników aktualizują najnowszy stan robota w formie struktury state, a następnie cykliczny wątek wysyła dane do komputera. W międzyczasie drugi wątek nasłuchuje na dane sterujące i powiadamia wątki sterowania silnikami oraz ledów. Sterowanie jest również przepisywane do struktury przechowującej stan robota.
+
+# Hardware
+
+Dwa słowa na temat podjętych decyzji projektowych - dobór elementów, zarówno elektronicznych jak i mechanicznych.
+
+## Mechanika
+
+Silniki z enkoderami, drukowane elementy, standard [Open Robotic Platform](https://openroboticplatform.com) wraz z podaniem autora.
+
+Uzyte oprogrowamowanie, gdzie znajduje się repozytorium sprzętu
+
+## Elektronika
+
+Jakie czujniki, jaki mikrokontroler, zasilanie powerbank, pierwsza rewizja na Hackaday Prize, druga rewizja z większą liczbą czujników.
+
+Użyte oprogramowanie, gdzie znajduje się repozytorium elektroniki. Notka o tym, że aktualna rewizja nie jest finalną rewizją - wymaga poprawki do sterowania silnikami, nie jest możliwe jednoczesne pisanie do flasha i korzystanie z PSRAMu.
+
+
+
+# Firmware
+
+
+[Oprogramowanie robota](https://github.com/kabot-io/kabot-zephyr/) powstało przy użyciu systemu opercyjnego czasu rzeczywistego [Zephyr](https://docs.zephyrproject.org/latest/index.html). Pozwala on na czyste oddzielenie opisu sprzętu od aplikacji.
+
+Jakie warstwy abstrakcji występują w firmwarze? Zbus, serwisy ingress/egress, discovery.
+
+
+# Software
+
+
+
+
+┌ ┬ ┐─ ┼├ └ ┴ ┘┤
+
+
+# What is kabot?
+
+In a nutshell, kabot project aim is to create a hardware and software stack that is useful tool in the 
+
+a small mobile platform that can ingest control commands and sends out state commands. It's main focus is to lower entry barrier (both cost and start-effort wise) to the world of mobile robots. The project is not aiming to be _Just Another Arduino Robot_ - they usually lack software support and the 
+
+Control port - firmware ingress: `30010`
+Discovery target port - firmware discovery ingress: `30012`
+State listen port - HMI ingress: `30011`
+
